@@ -108,10 +108,15 @@ func (m *Metrics) Close() {
 	m.BytesOut.Mean = float64(m.BytesOut.Total) / float64(m.Requests)
 	m.Success = float64(m.success) / float64(m.Requests)
 	m.Latencies.Mean = time.Duration(float64(m.Latencies.Total) / float64(m.Requests))
+	m.Latencies.P25 = m.Latencies.Quantile(0.25)
 	m.Latencies.P50 = m.Latencies.Quantile(0.50)
+	m.Latencies.P75 = m.Latencies.Quantile(0.75)
 	m.Latencies.P90 = m.Latencies.Quantile(0.90)
 	m.Latencies.P95 = m.Latencies.Quantile(0.95)
 	m.Latencies.P99 = m.Latencies.Quantile(0.99)
+	m.Latencies.P99_5 = m.Latencies.Quantile(0.995)
+	m.Latencies.P99_9 = m.Latencies.Quantile(0.999)
+	m.Latencies.P99_99 = m.Latencies.Quantile(0.9999)
 }
 
 func (m *Metrics) init() {
@@ -134,14 +139,24 @@ type LatencyMetrics struct {
 	Total time.Duration `json:"total"`
 	// Mean is the mean request latency.
 	Mean time.Duration `json:"mean"`
+	// P25 is the 25th percentile request latency.
+	P25 time.Duration `json:"25th"`
 	// P50 is the 50th percentile request latency.
 	P50 time.Duration `json:"50th"`
+	// P75 is the 75th percentile request latency.
+	P75 time.Duration `json:"75th"`
 	// P90 is the 90th percentile request latency.
 	P90 time.Duration `json:"90th"`
 	// P95 is the 95th percentile request latency.
 	P95 time.Duration `json:"95th"`
 	// P99 is the 99th percentile request latency.
 	P99 time.Duration `json:"99th"`
+	// P99_5 is the 99.5th percentile request latency.
+	P99_5 time.Duration `json:"99_5th"`
+	// P99_9 is the 99.9th percentile request latency.
+	P99_9 time.Duration `json:"99_9th"`
+	// P99_99 is the 99.9th percentile request latency.
+	P99_99 time.Duration `json:"99_99th"`					
 	// Max is the maximum observed request latency.
 	Max time.Duration `json:"max"`
 	// Min is the minimum observed request latency.
